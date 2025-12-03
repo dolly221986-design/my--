@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Aditi!</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: black;
+        font-family: 'Arial', sans-serif;
+        color: #ffdd00;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100vh;
+    }
+
+    #birthdayMessage {
+        max-width: 80%;
+        font-size: 24px;
+        color: #ffdd00;
+        text-shadow: 0 0 10px #ffdd00, 0 0 20px #ffdd00;
+        white-space: pre-line;
+    }
+
+    #birthdayImage {
+        width: 300px;
+        height: auto;
+        border-radius: 10px;
+        margin-top: 20px;
+        z-index: 1;
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
+</style>
+</head>
+<body>
+
+<audio autoplay loop>
+  <source src="https://www.fesliyanstudios.com/play-mp3/387" type="audio/mpeg">
+</audio>
+
+<canvas id="confetti"></canvas>
+
+<div id="birthdayMessage"></div>
+
+<img id="birthdayImage" src="https://drive.google.com/uc?export=view&id=1Il8N0tJH8ZuXK5KbCzbFv5A2C8KqR-EF" alt="Birthday Image">
+<img id="birthdayImage" src="https://drive.google.com/uc?export=view&id=1x6US9aEN7scRw74cSdpEk8bgSBRfSmmX" alt="Birthday Image" style="display:none;">
+
+<script>
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+class Confetti {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height - canvas.height;
+        this.radius = Math.random() * 6 + 4;
+        this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        this.speed = Math.random() * 3 + 2;
+        this.angle = Math.random() * 2 * Math.PI;
+        this.angularSpeed = Math.random() * 0.1 - 0.05;
+    }
+    update() {
+        this.y += this.speed;
+        this.angle += this.angularSpeed;
+        if(this.y > canvas.height) this.y = -this.radius;
+    }
+    draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.radius/2, -this.radius/2, this.radius, this.radius);
+        ctx.restore();
+    }
+}
+
+const confettis = [];
+for(let i =0;i<150;i++) confettis.push(new Confetti());
+
+function animate() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    confettis.forEach(c => { c.update(); c.draw(); });
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+// Slideshow for images
+let imgs = document.querySelectorAll('#birthdayImage');
+let current = 0;
+setInterval(() => {
+    imgs[current].style.display = 'none';
+    current = (current+1)%imgs.length;
+    imgs[current].style.display = 'block';
+}, 5000); // 5 sec interval
+
+// Typing effect for message
+const message = `Hey Aditi! 😎
+
+Happy Birthday meri sabse crazy, mast aur thodi badi bakar bestfriend ko!
+Pehle toh sach bolu, kabhi-kabhi tu itni impossible ho jaati hai ki lagta hai main ‘Do Not Disturb’ mode pe permanently shift ho jau 😏.
+Par phir yaad aata hai ki tu hi wo insaan hai jo mere boring din ko bhi full-on comedy show bana deti hai. 😂
+
+Tu kabhi bura bolti hai, kabhi cute ban jaati hai, kabhi ‘I don’t care’ attitude, aur agle hi second full sweet version.
+Kabhi gusse wali Aditi, kabhi emotional Aditi, kabhi overthinking Aditi, aur kabhi world’s best bakbak machine Aditi. 😄
+
+Lekin sach ye hai ki — yeh saare versions milke hi tu perfect best friend banti hai.
+Aisi friend har kisi ko nahi milti. Tu jaisi bhi hai — irritating + funny + caring + thodi pagal — sab mila ke tu ek hi piece hai.
+Aur honestly, main lucky hoon ki tu meri best friend hai. 💛
+
+Aaj ke din bas itna hi bolunga — enjoy your day Aditi, aur haan, aaj ke din thoda kam irritate karna… but thodi si karna zaroor, warna lagta hai birthday hi fake tha! 😜
+
+Love,
+Krishna`;
+
+let i = 0;
+const typingSpeed = 50; // milliseconds
+const messageDiv = document.getElementById('birthdayMessage');
+
+function typeMessage() {
+    if(i < message.length){
+        messageDiv.innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeMessage, typingSpeed);
+    }
+}
+
+typeMessage();
+</script>
+
+</body>
+</html>
